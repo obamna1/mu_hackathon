@@ -1,0 +1,27 @@
+# ------------------------------------
+# MUSIKA NFT MINTING PROJECT .gitignore
+# ------------------------------------
+
+
+.env
+mint_temp.json
+my_solana_wallet.json
+
+
+bin/
+obj/
+mint_js/node_modules/
+
+
+*.user
+*.log
+.vscode/
+*.suo
+
+
+*.png
+*.jpg
+*.zip
+
+.DS_Store
+Thumbs.db
