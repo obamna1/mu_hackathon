@@ -76,6 +76,7 @@ namespace mu_marketplaceV0.Controllers
                 Explicit = (bool?)data.@object.@explicit ?? false,
                 language_code = (string)data.@object.languageCode,
                 distributor = (string)data.@object.distributor,
+                ImageUrl = (string?)data.@object.imageUrl,
                 last_synced = DateTime.UtcNow
             };
 

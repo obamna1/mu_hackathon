@@ -19,6 +19,8 @@ namespace mu_marketplaceV0.Models
         public bool Explicit { get; set; }
         public string language_code { get; set; }
         public string distributor { get; set; }
+        // New: Soundcharts API image URL
+        public string? ImageUrl { get; set; }
         public DateTime? last_synced { get; set; }
     }
 }
