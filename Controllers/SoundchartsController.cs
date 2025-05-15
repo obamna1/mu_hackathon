@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace mu_marketplaceV0.Controllers
 {
@@ -77,10 +79,20 @@ namespace mu_marketplaceV0.Controllers
                 last_synced = DateTime.UtcNow
             };
 
-            _context.SC_GETSONG.Add(song);
-            await _context.SaveChangesAsync();
-
-            return Ok("Song metadata inserted.");
+            try
+            {
+                _context.SC_GETSONG.Add(song);
+                await _context.SaveChangesAsync();
+                return Ok("Song metadata inserted.");
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627)
+                {
+                    return Conflict("Song already exists in the database.");
+                }
+                return StatusCode(500, $"Error saving song metadata: {ex.Message}");
+            }
         }
     }
 }
