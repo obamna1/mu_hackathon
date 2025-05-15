@@ -50,16 +50,10 @@ const payer = Keypair.fromSecretKey(secretKeyDecoded);
 
         // On-chain metadata: embed attributes and image in Data URI
         const onChainAttrs = [
-            { trait_type: "Artist",       value: metadata.artist },
-            { trait_type: "Title",        value: metadata.title },
-            { trait_type: "Release Date", value: metadata.release_date },
-            { trait_type: "ISRC",         value: metadata.isrc }
+            { trait_type: "Artist", value: metadata.artist },
+            { trait_type: "ISRC",   value: metadata.isrc }
         ];
-        const onChainMeta = {
-            name: metadata.title,
-            image: "https://solana.com/src/img/branding/solanaLogoMark.svg",
-            attributes: onChainAttrs
-        };
+        const onChainMeta = { attributes: onChainAttrs };
         const dataUri = "data:application/json;base64," + Buffer.from(JSON.stringify(onChainMeta)).toString("base64");
 
         const data = {
