@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using mu_marketplaceV0.Models;
 using DotNetEnv; // Add this for .env support
 using Microsoft.Extensions.DependencyInjection;
+using mu_marketplaceV0.Services;
 
 // Load .env into environment variables
 Env.Load();
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<SongMetaDbContext>(options =>
     options.UseSqlServer(builder.Configuration["NFT_CACHE_CONNECTION_STRING"]));
 
 builder.Services.AddHttpClient();
+builder.Services.AddSingleton<SolanaWalletService>();
 // Add MVC services
 builder.Services.AddControllersWithViews();
 

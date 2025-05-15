@@ -2,8 +2,10 @@
 using System.Text.Json;
 using System.Text.Encodings.Web;
 using mu_marketplaceV0.Models;
+using System.Collections.Generic;
 using mu_marketplaceV0.ViewModels;
 using System.Threading.Tasks;
+using mu_marketplaceV0.Services;
 
 namespace mu_marketplaceV0.Controllers
 {
@@ -11,10 +13,12 @@ namespace mu_marketplaceV0.Controllers
     public class MetaController : Controller
     {
         private readonly SongMetaDbContext _context;
+        private readonly SolanaWalletService _walletService;
 
-        public MetaController(SongMetaDbContext context)
+        public MetaController(SongMetaDbContext context, SolanaWalletService walletService)
         {
             _context = context;
+            _walletService = walletService;
         }
 
         // GET /Meta?id=1
@@ -33,10 +37,15 @@ namespace mu_marketplaceV0.Controllers
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
+            var walletAddress = _walletService.GetPublicAddress();
+            var tokensBySong = await _walletService.GetTokensBySongAsync();
+
             var vm = new MetaViewModel
             {
                 Song = song,
-                Json = JsonSerializer.Serialize(song, options)
+                Json = JsonSerializer.Serialize(song, options),
+                WalletAddress = walletAddress,
+                TokensBySong = tokensBySong
             };
 
             ViewData["Title"] = "Metadata Test";
@@ -71,7 +80,8 @@ namespace mu_marketplaceV0.Controllers
             new { trait_type = "Language", value = song.Language },
             new { trait_type = "Duration", value = song.DurationSeconds },
             new { trait_type = "Country", value = song.OriginCountry },
-            new { trait_type = "Distributor", value = song.Distributor }
+            new { trait_type = "Distributor", value = song.Distributor },
+new { trait_type = "SongId", value = song.Id }
         }
             };
 
