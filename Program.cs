@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using mu_marketplaceV0.Models;
 using DotNetEnv; // Add this for .env support
+using Microsoft.Extensions.DependencyInjection;
 
 // Load .env into environment variables
 Env.Load();
@@ -22,6 +23,18 @@ builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+﻿// Provision and migrate databases
+using (var scope = app.Services.CreateScope())
+{
+    // Ensure Soundcharts database exists (creates DB & tables if missing)
+    var soundchartsDb = scope.ServiceProvider.GetRequiredService<SoundchartsDbContext>();
+    soundchartsDb.Database.EnsureCreated();
+
+    // Apply migrations to SongMeta database
+    var metaDb = scope.ServiceProvider.GetRequiredService<SongMetaDbContext>();
+    metaDb.Database.Migrate();
+}
 
 if (!app.Environment.IsDevelopment())
 {
