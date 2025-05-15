@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Controllers/MetaController.cs
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Encodings.Web;
 using mu_marketplaceV0.Models;
@@ -64,25 +65,19 @@ namespace mu_marketplaceV0.Controllers
 
             CleanMetadata(song);
 
-            var imageUrl = $"https://en.wikipedia.org/wiki/Special:FilePath/{Uri.EscapeDataString(song.Title)}_cover.jpg";
-
             var metadata = new
             {
                 name = song.Title,
                 symbol = song.Isrc?.Substring(0, 4).ToUpper() ?? "SONG",
                 description = $"A verified rights NFT for {song.Title} by {song.Artist}.",
-                image = imageUrl,
+                image = "https://solana.com/src/img/branding/solanaLogoMark.svg",
                 attributes = new List<object>
-        {
-            new { trait_type = "Artist", value = song.Artist },
-            new { trait_type = "Release Date", value = song.ReleaseDate.ToString("yyyy-MM-dd") },
-            new { trait_type = "Explicit", value = song.Explicit },
-            new { trait_type = "Language", value = song.Language },
-            new { trait_type = "Duration", value = song.DurationSeconds },
-            new { trait_type = "Country", value = song.OriginCountry },
-            new { trait_type = "Distributor", value = song.Distributor },
-new { trait_type = "SongId", value = song.Id }
-        }
+                {
+                    new { trait_type = "Artist",       value = song.Artist },
+                    new { trait_type = "Title",        value = song.Title },
+                    new { trait_type = "Release Date", value = song.ReleaseDate.ToString("yyyy-MM-dd") },
+                    new { trait_type = "ISRC",         value = song.Isrc }
+                }
             };
 
             var options = new JsonSerializerOptions
@@ -93,8 +88,6 @@ new { trait_type = "SongId", value = song.Id }
 
             return new JsonResult(metadata, options);
         }
-
-
 
         private void CleanMetadata(SongNFTMetadata song)
         {
