@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "About";
+}
+
+<h1>About</h1>
+
+<p>This project is a music NFT minting system built with a .NET MVC backend and a Node.js script for Solana blockchain interaction.</p>
+
+<ul>
+    <li>The backend (C#) manages song/NFT metadata and orchestrates the minting process.</li>
+    <li>Minting is triggered by an HTTP request to <code>/Mint?id={songId}</code>. The backend serializes the song metadata and invokes a Node.js script.</li>
+    <li>The Node.js script connects to Solana, mints the NFT, and writes on-chain metadata.</li>
+    <li>EF Core is used for database access and standard .NET MVC patterns for web features.</li>
+    <li>There is no dedicated Razor view for minting; minting is handled via direct HTTP requests.</li>
+    <li>The project is designed for easy extension: add new metadata fields by updating the model, controller, and script.</li>
+</ul>
