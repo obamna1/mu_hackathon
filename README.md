@@ -4,6 +4,22 @@ This project is a .NET 8 MVC web application that dynamically mints Solana NFTs 
 
 ---
 
+## 🏷️ Attribute Metadata Support
+
+This app now supports on-chain NFT attribute metadata (e.g., Artist, ISRC) in the Metaplex standard format.  
+When minting, the controller encodes a minimal JSON object with an `attributes` array, base64-encoded and stored in the on-chain URI.  
+This ensures that wallets and explorers display trait tags such as Artist and ISRC for each NFT.
+
+**Example on-chain metadata:**
+```json
+{
+  "attributes": [
+    { "trait_type": "Artist", "value": "Billie Eilish" },
+    { "trait_type": "ISRC",   "value": "USUM71900764" }
+  ]
+}
+```
+
 ## 🧠 How the Minting Flow Works
 
 1. **User triggers** `/Mint?id=1` in the browser.
