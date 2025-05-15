@@ -34,6 +34,31 @@ using (var scope = app.Services.CreateScope())
     // Apply migrations to SongMeta database
     var metaDb = scope.ServiceProvider.GetRequiredService<SongMetaDbContext>();
     metaDb.Database.Migrate();
+
+    // Test-seed one song so /Meta?id=1 works
+    if (!metaDb.SongNFTMetadata.Any(x => x.Id == 1))
+    {
+        metaDb.SongNFTMetadata.Add(new SongNFTMetadata
+        {
+            Id = 1,
+            Title = "BAD GUY",
+            Isrc = "USUM71900764",
+            Writer1 = "O'CONNELL BILLIE EILISH",
+            Writer2 = "OCONNELL FINNEAS BAIRD",
+            Publisher1 = "DRUP",
+            Publisher2 = "LAST FRONTIER",
+            AscapShare = 75,
+            Artist = "Billie Eilish",
+            ReleaseDate = DateTime.Parse("2019-03-28"),
+            Copyright = "© 2019 Darkroom/Interscope Records",
+            DurationSeconds = 194,
+            Explicit = false,
+            Language = "EN",
+            Distributor = "Universal",
+            OriginCountry = "United States"
+        });
+        metaDb.SaveChanges();
+    }
 }
 
 if (!app.Environment.IsDevelopment())
