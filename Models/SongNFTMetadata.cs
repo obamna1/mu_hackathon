@@ -6,6 +6,7 @@ namespace mu_marketplaceV0.Models
     [Table("SongNFTMetadata")]
     public class SongNFTMetadata
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Column("title")]
