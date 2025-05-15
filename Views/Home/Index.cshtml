@@ -2,6 +2,15 @@
     ViewData["Title"] = "Home";
 }
 
+<section class="hero py-5 mb-5" style="background: url('/img/hero_placeholder.jpg') center/cover no-repeat;">
+    <div class="text-center">
+        <h1 class="display-3 fw-bold gradient-text">Find Your Sound</h1>
+        <p class="lead mb-4">A More Equitable Music Industry</p>
+        <a href="/" class="btn btn-primary btn-lg me-2">Get Started</a>
+        <a href="/Home/About" class="btn btn-outline-light btn-lg">Learn More</a>
+    </div>
+</section>
+
 <div class="text-center mt-5">
     <h1 class="display-4 fw-bold">🎵 Welcome to Musika Marketplace</h1>
     <p class="lead">Decentralized, Verifiable Music Rights. Real Artists. Real Data.</p>
@@ -12,7 +21,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">🔍 Search Songs</h5>
+                    <h5 class="card-title"><i class="lucide-search"></i> Search Songs</h5>
                     <p class="card-text">Look up real metadata from Soundcharts and ASCAP to verify ownership.</p>
                     <a href="/Soundcharts/Ping" class="btn btn-primary">Test Soundcharts Ping</a>
                 </div>
@@ -24,7 +33,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">🧪 Test NFT Metadata</h5>
+                    <h5 class="card-title"><i class="lucide-file-text"></i> Test NFT Metadata</h5>
                     <p class="card-text">View and serialize NFT metadata from SongNFTMetadata database.</p>
                     <a href="/Meta" class="btn btn-success">Open Metadata Tester</a>
                 </div>
