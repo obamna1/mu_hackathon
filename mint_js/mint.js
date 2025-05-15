@@ -1,6 +1,6 @@
 ﻿require('dotenv').config();
-const bs58mod = require('bs58');
-const bs58 = bs58mod.default || bs58mod;
+const bs58 = require('bs58');
+const decodeBase58 = typeof bs58 === 'function' ? bs58 : bs58.decode;
 const fs = require('fs');
 const {
     Connection, Keypair, PublicKey, Transaction, SystemProgram,
@@ -17,7 +17,7 @@ const TOKEN_METADATA_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzj
 const metadata = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 
 const connection = new Connection(process.env.SOLANA_URL, 'confirmed');
-const secretKeyDecoded = bs58.decode(process.env.SOLANA_SECRET_KEY);
+const secretKeyDecoded = decodeBase58(process.env.SOLANA_SECRET_KEY);
 const payer = Keypair.fromSecretKey(secretKeyDecoded);
 
 (async () => {
