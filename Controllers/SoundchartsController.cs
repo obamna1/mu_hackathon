@@ -34,13 +34,13 @@ namespace mu_marketplaceV0.Controllers
 
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("x-app-id", _config["SOUNDCHARTS_APP_ID"]);
-            client.DefaultRequestHeaders.Add("x-api-key", _config["SOUNDCHARTS_API_KEY"]);
+            client.DefaultRequestHeaders.Add("x-api-key", _config["SOUNDCHARTS_APP_KEY"]);
 
             var baseUrl = _config["SOUNDCHARTS_BASE_URL"]?.TrimEnd('/');
             if (string.IsNullOrWhiteSpace(baseUrl))
                 return StatusCode(500, "SOUNDCHARTS_BASE_URL is not configured properly.");
 
-            var fullUrl = $"{baseUrl}/song/{uuid}";
+            var fullUrl = $"{baseUrl}/api/v2.25/song/{uuid}";
             Console.WriteLine($"[DEBUG] Calling Soundcharts URL: {fullUrl}");
 
             HttpResponseMessage response;
