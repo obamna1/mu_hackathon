@@ -81,8 +81,8 @@ namespace mu_marketplaceV0.Controllers
             }
 
             // Parse successful mint details from STDOUT
-            var mintMatch = Regex.Match(output, @"Mint:\\s+([A-Za-z0-9]+)");
-            var txMatch   = Regex.Match(output, @"Transaction:\\s+([A-Za-z0-9]+)");
+            var mintMatch = Regex.Match(output, @"Mint:\s+([A-Za-z0-9]+)");
+            var txMatch   = Regex.Match(output, @"Transaction:\s+([A-Za-z0-9]+)");
 
             var viewModel = new MintResultViewModel
             {
