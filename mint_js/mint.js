@@ -16,7 +16,7 @@ const TOKEN_METADATA_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzj
 const metadata = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 
 const connection = new Connection(process.env.SOLANA_URL, 'confirmed');
-const secretKeyDecoded = bs58.decode(process.env.SOLANA_SECRET_KEY);
+const secretKeyDecoded = bs58(process.env.SOLANA_SECRET_KEY);
 const payer = Keypair.fromSecretKey(secretKeyDecoded);
 
 (async () => {
