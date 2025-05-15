@@ -185,3 +185,30 @@ footer {
 .bg-surface {
   background-color: var(--surface) !important;
 }
+
+/* Hero overlay styles */
+header {
+  position: relative;
+}
+
+.hero-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.hero-headline {
+  position: relative;
+  margin-top: -140px;
+  z-index: 5;
+  text-shadow: 0 1px 3px #000;
+}
+
+@media (min-width: 992px) {
+  .hero-headline {
+    margin-top: -220px;
+  }
+}
