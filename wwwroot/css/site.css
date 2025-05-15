@@ -177,3 +177,11 @@ footer {
 .mb-5 {
   margin-bottom: 2.5rem !important;
 }
+
+/* Custom Utility */
+.text-accent {
+  color: var(--accent) !important;
+}
+.bg-surface {
+  background-color: var(--surface) !important;
+}
