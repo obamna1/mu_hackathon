@@ -48,11 +48,24 @@ const payer = Keypair.fromSecretKey(secretKeyDecoded);
         tx.add(splToken.createAssociatedTokenAccountInstruction(payer.publicKey, ata, payer.publicKey, mint.publicKey));
         tx.add(splToken.createMintToInstruction(mint.publicKey, ata, payer.publicKey, 1));
 
-        // Metadata
+        // On-chain metadata: embed attributes and image in Data URI
+        const onChainAttrs = [
+            { trait_type: "Artist",       value: metadata.artist },
+            { trait_type: "Title",        value: metadata.title },
+            { trait_type: "Release Date", value: metadata.release_date },
+            { trait_type: "ISRC",         value: metadata.isrc }
+        ];
+        const onChainMeta = {
+            name: metadata.title,
+            image: "https://solana.com/src/img/branding/solanaLogoMark.svg",
+            attributes: onChainAttrs
+        };
+        const dataUri = "data:application/json;base64," + Buffer.from(JSON.stringify(onChainMeta)).toString("base64");
+
         const data = {
             name: metadata.title,
             symbol: metadata.isrc?.substring(0, 4).toUpperCase() || "SONG",
-            uri: metadata.uri,
+            uri: dataUri,
             sellerFeeBasisPoints: metadata.ascap_share || 0,
             creators: null,
             collection: null,
