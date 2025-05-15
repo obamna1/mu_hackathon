@@ -92,9 +92,29 @@ High-level steps:
 
 ## 4. Web Interface
 
-- There is **no dedicated Razor view** for minting.  
-- Minting is triggered directly via HTTP request to `/Mint?id={songId}`.  
-- The standard MVC views (`Views/Home`, `Views/Meta`, `Views/Soundcharts`) serve other features and layouts.
+Minting is triggered via HTTP request to `/Mint?id={songId}` and uses the following views and assets:
+
+- `Views/Mint/Result.cshtml` renders the minting result and logs.
+- Shared layout: `Views/Shared/_Layout.cshtml` provides navigation and styling.
+- JavaScript in `wwwroot/js/site.js` may handle AJAX or log display.
+
+### 4.1 Meta Endpoints
+
+Two endpoints expose metadata:
+
+1. GET `/Meta?id={id}`
+   - Renders a Razor view (`Views/Meta/Index.cshtml`) showing formatted metadata and raw JSON.
+2. GET `/metadata/{id}.json`
+   - Returns JSON metadata conforming to NFT standards with `name`, `symbol`, `description`, `image`, and `attributes`.
+
+### 4.2 Soundcharts Integration
+
+The Soundcharts feature uses:
+
+- `SoundchartsController` (Controllers/SoundchartsController.cs)
+- `SoundchartsDbContext` (Models/SoundchartsDbContext.cs)
+- Views: `Views/Soundcharts/Ping.cshtml` and `Views/Soundcharts/PingResult.cshtml`
+
 
 ---
 
@@ -119,5 +139,8 @@ High-level steps:
 ## 6. Additional Notes
 
 - **Database migrations** are in `Migrations/`.
+- Environment variables:
+  - .NET connection strings in `appsettings.Development.json`: `SOUNDCHARTS_CONNECTION_STRING`, `NFT_CACHE_CONNECTION_STRING`.
+  - Solana script `.env` (`mint_js/.env`): `SOLANA_URL`, `SOLANA_SECRET_KEY`.
 - Other controllers (`MetaController`, `SoundchartsController`) handle additional app features.
 - Follows standard .NET MVC and EF Core patterns—feel free to explore `Program.cs` and `Startup`/hosting configuration.
