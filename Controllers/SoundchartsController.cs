@@ -83,14 +83,17 @@ namespace mu_marketplaceV0.Controllers
             {
                 _context.SC_GETSONG.Add(song);
                 await _context.SaveChangesAsync();
-                return Ok("Song metadata inserted.");
+                return View("PingResult", song);
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627)
+            {
+                var existingSong = await _context.SC_GETSONG
+                                                 .AsNoTracking()
+                                                 .FirstOrDefaultAsync(s => s.uuid == song.uuid);
+                return View("PingResult", existingSong);
             }
             catch (DbUpdateException ex)
             {
-                if (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627)
-                {
-                    return Conflict("Song already exists in the database.");
-                }
                 return StatusCode(500, $"Error saving song metadata: {ex.Message}");
             }
         }
