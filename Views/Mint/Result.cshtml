@@ -1,0 +1,39 @@
+@model MintResultViewModel
+@{
+    ViewData["Title"] = "NFT Minted!";
+}
+
+<div class="card shadow-lg mt-5">
+    <div class="card-body text-center">
+        <div class="display-6 text-success mb-3">
+            <i class="lucide lucide-check-circle"></i> Mint Successful!
+        </div>
+
+        <p class="lead">Your NFT has been successfully minted on the Solana <strong>testnet</strong>.</p>
+
+        <div class="mb-4">
+            <h5 class="mb-1">Mint Address</h5>
+            <code class="user-select-all">@Model.MintAddress</code>
+        </div>
+
+        <div class="mb-4">
+            <h5 class="mb-1">Transaction Signature</h5>
+            <code class="user-select-all">@Model.TransactionSignature</code>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ExplorerUrl))
+        {
+            <a class="btn btn-primary" target="_blank" rel="noopener"
+               href="@Model.ExplorerUrl">
+                View on Solana Explorer
+                <i class="lucide lucide-external-link ms-1"></i>
+            </a>
+        }
+
+        <details class="mt-4">
+            <summary>View raw process output</summary>
+            <pre class="text-start bg-light p-3 rounded overflow-auto" style="max-height:300px;"><code>@Model.RawOutput</code></pre>
+            <pre class="text-start bg-light p-3 rounded overflow-auto" style="max-height:300px;"><code class="text-danger">@Model.RawError</code></pre>
+        </details>
+    </div>
+</div>

@@ -3,8 +3,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using mu_marketplaceV0.Models;
+using mu_marketplaceV0.ViewModels;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace mu_marketplaceV0.Controllers
 {
@@ -78,7 +80,22 @@ namespace mu_marketplaceV0.Controllers
                 return StatusCode(500, combinedLog);
             }
 
-            return Content(combinedLog);
+            // Parse successful mint details from STDOUT
+            var mintMatch = Regex.Match(output, @"Mint:\\s+([A-Za-z0-9]+)");
+            var txMatch   = Regex.Match(output, @"Transaction:\\s+([A-Za-z0-9]+)");
+
+            var viewModel = new MintResultViewModel
+            {
+                MintAddress = mintMatch.Success ? mintMatch.Groups[1].Value : null,
+                TransactionSignature = txMatch.Success ? txMatch.Groups[1].Value : null,
+                ExplorerUrl = mintMatch.Success
+                    ? $"https://explorer.solana.com/address/{mintMatch.Groups[1].Value}?cluster=testnet"
+                    : null,
+                RawOutput = output,
+                RawError  = error
+            };
+
+            return View("Result", viewModel);
 
         }
 
