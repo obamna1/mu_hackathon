@@ -53,5 +53,7 @@ namespace mu_marketplaceV0.Models
 
         [Column("origin_country")]
         public string OriginCountry { get; set; }
+
+        public string? ImageUrl { get; set; }
     }
 }
