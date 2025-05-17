@@ -121,7 +121,7 @@ We laid the groundwork across **two tightly integrated divisions**:
 - Discovery stamped with ULID, signed via Ed25519, logged on Solana
 - Signature generates a deterministic identicon—the visual fingerprint of the NFT
 - When the artist signs, we reveal the signature seeds for public verification
-- No trust, no leaks. Fully verifiable
+- No trust, no leaks. Fully verifiable.
 
 
 ---
