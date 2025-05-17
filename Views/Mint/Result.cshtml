@@ -9,6 +9,13 @@
             <i class="lucide lucide-check-circle text-accent"></i> Mint&nbsp;Successful!
         </h2>
 
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="mb-4">
+                <img src="@Model.ImageUrl" alt="NFT Cover" class="img-fluid rounded" style="max-width:200px;" />
+            </div>
+        }
+
         <p class="lead">Your NFT has been successfully minted on the Solana <strong>testnet</strong>.</p>
 
         <div class="mb-4">

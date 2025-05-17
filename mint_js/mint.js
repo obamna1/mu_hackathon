@@ -12,8 +12,13 @@ const {
 
 const TOKEN_METADATA_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
 
-// Load input JSON
 const metadata = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const dataUriJson = metadata.uri || metadata.image_url;
+
+if (!dataUriJson) {
+    console.error('[❌] Mint failed: Missing URI or image_url in metadata');
+    process.exit(1);
+}
 
 const connection = new Connection(process.env.SOLANA_URL, 'confirmed');
 const secretKeyDecoded = bs58.decode(process.env.SOLANA_SECRET_KEY);
@@ -48,18 +53,10 @@ const payer = Keypair.fromSecretKey(secretKeyDecoded);
         tx.add(splToken.createAssociatedTokenAccountInstruction(payer.publicKey, ata, payer.publicKey, mint.publicKey));
         tx.add(splToken.createMintToInstruction(mint.publicKey, ata, payer.publicKey, 1));
 
-        // On-chain metadata: embed attributes and image in Data URI
-        const onChainAttrs = [
-            { trait_type: "Artist", value: metadata.artist },
-            { trait_type: "ISRC",   value: metadata.isrc }
-        ];
-        const onChainMeta = { attributes: onChainAttrs };
-        const dataUri = "data:application/json;base64," + Buffer.from(JSON.stringify(onChainMeta)).toString("base64");
-
         const data = {
             name: metadata.title,
             symbol: metadata.isrc?.substring(0, 4).toUpperCase() || "SONG",
-            uri: dataUri,
+            uri: dataUriJson,
             sellerFeeBasisPoints: metadata.ascap_share || 0,
             creators: null,
             collection: null,

@@ -1,4 +1,4 @@
-@model mu_marketplaceV0.Models.SC_GETSONG
+@model mu_marketplaceV0.Models.Song
 
 @{
     ViewData["Title"] = "Song Details";
@@ -12,12 +12,20 @@
         <td>@Model.uuid</td>
     </tr>
     <tr>
+        <th>Type</th>
+        <td>@Model.type</td>
+    </tr>
+    <tr>
         <th>Title</th>
         <td>@Model.name</td>
     </tr>
     <tr>
         <th>Artist / Credit</th>
         <td>@Model.credit_name</td>
+    </tr>
+    <tr>
+        <th>Artist</th>
+        <td>@Model.artist_name</td>
     </tr>
     <tr>
         <th>ISRC</th>
@@ -35,17 +43,29 @@
         <th>Duration</th>
         <td>@((Model.duration ?? 0) + " sec")</td>
     </tr>
-    <tr>
-        <th>Explicit</th>
-        <td>@(Model.Explicit ? "Yes" : "No")</td>
-    </tr>
+        <tr>
+            <th>Explicit</th>
+            <td>@((Model.Explicit ?? false) ? "Yes" : "No")</td>
+        </tr>
     <tr>
         <th>Distributor</th>
         <td>@Model.distributor</td>
     </tr>
     <tr>
-        <th>Last Synced</th>
-        <td>@Model.last_synced?.ToString("u")</td>
+        <th>Genres</th>
+        <td>@Model.genres</td>
+    </tr>
+    <tr>
+        <th>Composers</th>
+        <td>@Model.composers</td>
+    </tr>
+    <tr>
+        <th>Producers</th>
+        <td>@Model.producers</td>
+    </tr>
+    <tr>
+        <th>Labels</th>
+        <td>@Model.labels</td>
     </tr>
 </table>
 

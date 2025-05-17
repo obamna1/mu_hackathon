@@ -70,13 +70,14 @@ namespace mu_marketplaceV0.Controllers
                 name = song.Title,
                 symbol = song.Isrc?.Substring(0, 4).ToUpper() ?? "SONG",
                 description = $"A verified rights NFT for {song.Title} by {song.Artist}.",
-                image = "https://solana.com/src/img/branding/solanaLogoMark.svg",
+                image = song.ImageUrl,
                 attributes = new List<object>
                 {
                     new { trait_type = "Artist",       value = song.Artist },
                     new { trait_type = "Title",        value = song.Title },
                     new { trait_type = "Release Date", value = song.ReleaseDate.ToString("yyyy-MM-dd") },
-                    new { trait_type = "ISRC",         value = song.Isrc }
+                    new { trait_type = "ISRC",         value = song.Isrc },
+                    new { trait_type = "image_url",    value = song.ImageUrl }
                 }
             };
 

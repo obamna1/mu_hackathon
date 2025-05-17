@@ -2,7 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using mu_marketplaceV0.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -60,38 +63,81 @@ namespace mu_marketplaceV0.Controllers
 
             var json = await response.Content.ReadAsStringAsync();
             dynamic data = JsonConvert.DeserializeObject(json);
+            var jObj = (JObject)data.@object;
 
-            var song = new SC_GETSONG
+            var song = new Song
             {
-                uuid = Guid.Parse((string)data.@object.uuid),
-                name = (string)data.@object.name,
-                credit_name = (string)data.@object.creditName,
-                isrc_value = (string)data.@object.isrc.value,
-                isrc_country_code = (string)data.@object.isrc.countryCode,
-                isrc_country_name = (string)data.@object.isrc.countryName,
-                release_date = (DateTime?)data.@object.releaseDate,
-                copyright = (string)data.@object.copyright,
-                app_url = (string)data.@object.appUrl,
-                duration = (int?)data.@object.duration,
-                Explicit = (bool?)data.@object.@explicit ?? false,
-                language_code = (string)data.@object.languageCode,
-                distributor = (string)data.@object.distributor,
-                ImageUrl = (string?)data.@object.imageUrl,
-                last_synced = DateTime.UtcNow
+                uuid = Guid.Parse((string)jObj["uuid"]),
+                type = (string)data.type,
+                name = (string)jObj["name"],
+                isrc_value = (string?)jObj["isrc"]?["value"],
+                isrc_country_code = (string?)jObj["isrc"]?["countryCode"],
+                isrc_country_name = (string?)jObj["isrc"]?["countryName"],
+                credit_name = (string?)jObj["creditName"],
+                artist_uuid = jObj["artists"]?.First?["uuid"] != null 
+                              ? Guid.Parse((string)jObj["artists"].First["uuid"]) 
+                              : (Guid?)null,
+                artist_slug = (string?)jObj["artists"]?.First?["slug"],
+                artist_name = (string?)jObj["artists"]?.First?["name"],
+                artist_app_url = (string?)jObj["artists"]?.First?["appUrl"],
+                artist_image_url = (string?)jObj["artists"]?.First?["imageUrl"],
+                release_date = jObj["releaseDate"] != null 
+                               ? (DateTimeOffset?)DateTimeOffset.Parse((string)jObj["releaseDate"]) 
+                               : null,
+                copyright = (string?)jObj["copyright"],
+                app_url = (string?)jObj["appUrl"],
+                image_url = (string?)jObj["imageUrl"],
+                duration = (int?)jObj["duration"],
+                Explicit = (bool?)jObj["explicit"] ?? false,
+                genres = jObj["genres"] != null 
+                         ? string.Join(",", jObj["genres"].Select(g => $"{(string)g["root"]}:{(string)g["sub"][0]}")) 
+                         : null,
+                composers = jObj["composers"] != null 
+                            ? string.Join(",", jObj["composers"].ToObject<List<string>>()) 
+                            : null,
+                producers = jObj["producers"] != null 
+                            ? string.Join(",", jObj["producers"].ToObject<List<string>>()) 
+                            : null,
+                labels = jObj["labels"] != null 
+                         ? string.Join(",", jObj["labels"].Select(l => $"{(string)l["name"]}:{(string)l["type"]}")) 
+                         : null,
+                audio_acousticness = (double?)jObj["audio"]?["acousticness"],
+                audio_danceability = (double?)jObj["audio"]?["danceability"],
+                audio_energy = (double?)jObj["audio"]?["energy"],
+                audio_instrumentalness = (double?)jObj["audio"]?["instrumentalness"],
+                audio_key = (int?)jObj["audio"]?["key"],
+                audio_liveness = (double?)jObj["audio"]?["liveness"],
+                audio_loudness = (double?)jObj["audio"]?["loudness"],
+                audio_mode = (int?)jObj["audio"]?["mode"],
+                audio_speechiness = (double?)jObj["audio"]?["speechiness"],
+                audio_tempo = (double?)jObj["audio"]?["tempo"],
+                audio_time_signature = (int?)jObj["audio"]?["timeSignature"],
+                audio_valence = (double?)jObj["audio"]?["valence"],
+                language_code = (string?)jObj["languageCode"],
+                distributor = (string?)jObj["distributor"]
             };
 
             try
             {
-                _context.SC_GETSONG.Add(song);
+                // Check if the song already exists
+                var existingSong = await _context.Songs
+                                          .FirstOrDefaultAsync(s => s.uuid == song.uuid);
+                
+                if (existingSong != null)
+                {
+                    // Keep the original primary key
+                    song.song_id = existingSong.song_id;
+                    
+                    // Update the existing record with fresh values
+                    _context.Entry(existingSong).CurrentValues.SetValues(song);
+                    await _context.SaveChangesAsync();
+                    return View("PingResult", existingSong);
+                }
+                
+                // Add as a new record
+                _context.Songs.Add(song);
                 await _context.SaveChangesAsync();
                 return View("PingResult", song);
-            }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627)
-            {
-                var existingSong = await _context.SC_GETSONG
-                                                 .AsNoTracking()
-                                                 .FirstOrDefaultAsync(s => s.uuid == song.uuid);
-                return View("PingResult", existingSong);
             }
             catch (DbUpdateException ex)
             {
