@@ -16,5 +16,7 @@ namespace mu_marketplaceV0.ViewModels
         // Raw logs (stdout / stderr) are helpful for diagnostics
         public string RawOutput { get; set; } = string.Empty;
         public string RawError  { get; set; } = string.Empty;
+
+        public string? ImageUrl { get; set; }
     }
 }
