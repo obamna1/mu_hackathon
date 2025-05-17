@@ -22,17 +22,21 @@ namespace mu_marketplaceV0.Services
 
         public SolanaWalletService(IHttpClientFactory httpFactory, ILogger<SolanaWalletService> logger)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             Env.Load();
-            var secretKeyBytes = Encoders.Base58.DecodeData(Environment.GetEnvironmentVariable("SOLANA_SECRET_KEY"));
+            var secretKey = Environment.GetEnvironmentVariable("SOLANA_SECRET_KEY");
+            _logger.LogInformation("Loaded SOLANA_SECRET_KEY: {SecretKey}", secretKey);
+
+            var secretKeyBytes = Encoders.Base58.DecodeData(secretKey);
             var seed = new byte[32];
             Array.Copy(secretKeyBytes, 0, seed, 0, 32);
             var privParam = new Ed25519PrivateKeyParameters(seed, 0);
             var pubParam = privParam.GeneratePublicKey();
             var pubKeyBytes = pubParam.GetEncoded();
             _owner = Encoders.Base58.EncodeData(pubKeyBytes);
+            _logger.LogInformation("Derived wallet public address: {WalletAddress}", _owner);
 
             _client = httpFactory.CreateClient();
-            _logger = logger;
         }
 
         public string GetPublicAddress() => _owner;
@@ -73,7 +77,7 @@ namespace mu_marketplaceV0.Services
                     var amount = info.GetProperty("tokenAmount").GetProperty("uiAmount").GetDecimal();
                     if (amount <= 0) continue;
                     var mint = info.GetProperty("mint").GetString();
-                    var explorerUrl = $"https://explorer.solana.com/address/{mint}?cluster=testnet";
+                    var explorerUrl = $"https://explorer.solana.com/address/{mint}?cluster=devnet";
                     var tokenInfo = new TokenInfo(mint, amount, explorerUrl);
 
                     if (!result.ContainsKey(0))

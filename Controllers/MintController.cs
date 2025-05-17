@@ -110,7 +110,7 @@ namespace mu_marketplaceV0.Controllers
                 MintAddress = mintMatch.Success ? mintMatch.Groups[1].Value : null,
                 TransactionSignature = txMatch.Success ? txMatch.Groups[1].Value : null,
                 ExplorerUrl = mintMatch.Success
-                    ? $"https://explorer.solana.com/address/{mintMatch.Groups[1].Value}?cluster=testnet"
+                    ? $"https://explorer.solana.com/address/{mintMatch.Groups[1].Value}?cluster=devnet"
                     : null,
                 ImageUrl = song.ImageUrl,
                 RawOutput = output,

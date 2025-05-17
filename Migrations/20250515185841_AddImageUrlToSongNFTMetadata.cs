@@ -8,15 +8,14 @@ namespace mu_marketplaceV0.Migrations
     public partial class AddImageUrlToSongNFTMetadata : Migration
     {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "image_url",
-                table: "SongNFTMetadata",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-        }
+            protected override void Up(MigrationBuilder migrationBuilder)
+            {
+                migrationBuilder.AddColumn<string>(
+                    name: "image_url",
+                    table: "SongNFTMetadata",
+                    type: "nvarchar(max)",
+                    nullable: true);
+            }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
