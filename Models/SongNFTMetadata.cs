@@ -54,11 +54,7 @@ namespace mu_marketplaceV0.Models
         [Column("origin_country")]
         public string OriginCountry { get; set; }
 
-<<<<<<< Updated upstream
-        public string? ImageUrl { get; set; }
-=======
         [Column("image_url")]
-        public string ImageUrl { get; set; }
->>>>>>> Stashed changes
+        public string? ImageUrl { get; set; }
     }
 }
