@@ -111,25 +111,25 @@ We laid the groundwork across **two tightly integrated divisions**:
 - Surfaces **unclaimed royalties** from public records  
 - Verified metadata → outreach → onboarding  
 - Converts recovery into discovery  
-- Pipeline into Scout
+- Pipeline into Scout Agent
 
 ---
 
 ### Scout: Automated A&R Agent
 
-- Scrapes SoundCloud for unsigned breakout signals  
-- Timestamps discovery with ULID → signs w/ Ed25519 → writes Memo tx to Solana  
-- Deterministic **identicon claim**  
+- Autonomous agent trawls SoundCloud for breakout signals
+- Discovery stamped with ULID, signed via Ed25519, logged on Solana
+- Signature generates a deterministic identicon—the visual fingerprint of the NFT
+- When the artist signs, we reveal the signature seeds for public verification
 - No trust, no leaks. Fully verifiable.
+
 
 ---
 
-## [Diagram Placeholder]  
-### “Scout: Discovery Without Disclosure”
+## Scout: Discovery Without Disclosure
 
-(Visual Flow of:  
-Scrape → ULID → Signature → Memo Tx → Identicon → Reveal  
-To be inserted visually for hackathon judges)
+![](./scout.png)
+
 
 ---
 
@@ -157,19 +157,21 @@ To be inserted visually for hackathon judges)
 
 ---
 
-### ANONBOND
+### ANONBOND NFTs
 
-- NFT bond financing for artists  
-- Backed by $MU + BTC  
-- Pays fixed yield + optional royalty upgrade  
-- Aligns fans, funders, and protocol liquidity
+- Agent mints NFT; shadows an undiscovered artist  
+- Launch auction sets yield in $MU by market forces
+- Strong buzz → release remaining NFTs; weak buzz → NFT supply locks  
+- Maturity date: can claim the $MU yield  
+- Hold past maturity → share in platform $MU/BTC pool  
+- Artist signs with Musika → NFT earns publishing royalties  
+- One token, three payoffs: $MU, BTC, royalties
 
 ---
 
-## [Diagram Placeholder]  
-### “ANONBOND Yield Flow”
+## ANONBOND Flow
 
-(Visual for Bond Buy → Talent Pool → Redemption Paths: MU payout vs. Royalty Upgrade)
+![Diagram](./anonbond.png)
 
 ---
 
