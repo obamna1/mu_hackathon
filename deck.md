@@ -1,5 +1,5 @@
 ---
-marp: false
+marp: true
 paginate: true
 theme: default
 class: invert
@@ -123,7 +123,6 @@ We laid the groundwork across **two tightly integrated divisions**:
 - When the artist signs, we reveal the signature seeds for public verification
 - No trust, no leaks. Fully verifiable.
 
-
 ---
 
 ## Scout: Discovery Without Disclosure
@@ -171,21 +170,10 @@ We laid the groundwork across **two tightly integrated divisions**:
 
 ## ANONBOND Flow
 
-
 ![Diagram](./anonbond.png)
 
 ---
 
-## ANONBON Narrative
-
-Picture the hush right before a stage light snaps on—an unannounced musician steps up, unknown but electric with possibility. That raw moment is what we’re packaging.
-We mint a single asset: an NFT that shadows that emerging talent, registering every spike in streams, every playlist add, every social whisper. The opening auction does more than set a price; it hard-codes a yield in $MU, Musika’s token, a living pulse of market belief. Momentum surges? We release additional NFTs and let more believers in. Momentum stalls? Supply freezes and scarcity becomes the headline.
-Fast-forward to maturity: claim your $MU and exit, or keep the NFT and tap a second engine—access to a BTC reserve that grows with platform revenue. And if the artist inks a deal with Musika Publishing, the token evolves once more, converting into real royalty flow.
-One early commitment, three stacked rewards: $MU yield, Bitcoin upside, future royalties.
-That’s not just an investment.  
-That’s a dinner-party story with an encore.
-
----
 
 # Musika Is...
 
