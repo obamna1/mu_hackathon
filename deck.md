@@ -159,7 +159,7 @@ We laid the groundwork across **two tightly integrated divisions**:
 
 ### ANONBOND NFTs
 
-- Agent mints NFT; shadows an undiscovered artist  
+- Agent mints NFT; shadows an unsigned artist  
 - Launch auction sets yield in $MU by market forces
 - Strong buzz → release remaining NFTs; weak buzz → NFT supply locks  
 - Maturity date: can claim the $MU yield  
