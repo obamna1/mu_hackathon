@@ -6,6 +6,7 @@ namespace mu_marketplaceV0.Models
     [Table("SongNFTMetadata")]
     public class SongNFTMetadata
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Column("title")]
@@ -52,5 +53,8 @@ namespace mu_marketplaceV0.Models
 
         [Column("origin_country")]
         public string OriginCountry { get; set; }
+
+        [Column("image_url")]
+        public string? ImageUrl { get; set; }
     }
 }

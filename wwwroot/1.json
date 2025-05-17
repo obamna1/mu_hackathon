@@ -1,0 +1,22 @@
+{
+  "title": "BAD GUY",
+  "isrc": "USUM71900764",
+  "writers": [
+    "O\u0027CONNELL BILLIE EILISH",
+    "OCONNELL FINNEAS BAIRD"
+  ],
+  "publishers": [
+    "DRUP",
+    "LAST FRONTIER"
+  ],
+  "ascap_share": 75,
+  "artist": "Billie Eilish",
+  "release_date": "2019-03-28",
+  "copyright": "\u00A9 2019 Darkroom/Interscope Records",
+  "duration_seconds": 194,
+  "explicit_": false,
+  "language": "EN",
+  "distributor": "Universal",
+  "origin_country": "United States",
+  "uri": "http://localhost:5096/metadata/1.json"
+}

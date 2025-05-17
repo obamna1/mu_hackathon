@@ -19,8 +19,6 @@ mint_js/node_modules/
 *.suo
 
 
-*.png
-*.jpg
 *.zip
 
 .DS_Store

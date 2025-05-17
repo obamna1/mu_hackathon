@@ -8,8 +8,17 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+:root {
+  --purple: #6366f1;
+  --pink: #ec4899;
+  --bg: #121212;
+  --surface: #1f1f1f;
+  --text: #e0e0e0;
+  --muted: #b3b3b3;
+  --accent: #10b981;
+  --card-radius: 1.25rem;
+  --card-shadow: 0 4px 32px 0 rgba(0,0,0,0.18), 0 1.5px 4px 0 rgba(99,102,241,0.08);
+  --btn-radius: 0.75rem;
 }
 
 html {
@@ -19,4 +28,187 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', Arial, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+header img {
+  border-radius: 0 0 1.5rem 1.5rem;
+  box-shadow: 0 4px 24px 0 rgba(99,102,241,0.10);
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Navbar & Footer */
+.navbar, .footer { background-color: var(--surface); }
+.navbar-brand, .nav-link, .footer .text-muted { color: var(--muted); }
+.nav-link.active, .navbar-brand:hover, .nav-link:hover { color: var(--accent); }
+.navbar {
+  border-radius: 1rem;
+  margin-bottom: 2rem !important;
+  box-shadow: 0 2px 12px 0 rgba(99,102,241,0.10);
+}
+
+/* Cards */
+.card {
+  background-color: var(--surface) !important;
+  border-color: #333 !important;
+  color: var(--text);
+  border-radius: var(--card-radius) !important;
+  box-shadow: var(--card-shadow) !important;
+  margin-bottom: 2rem;
+  transition: box-shadow 0.2s;
+}
+.card:hover {
+  box-shadow: 0 8px 40px 0 rgba(99,102,241,0.18), 0 2px 8px 0 rgba(99,102,241,0.12);
+}
+.card .card-title {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.card .card-text {
+  color: #bbb;
+  font-size: 1.08rem;
+}
+
+/* Buttons */
+.btn {
+  border-radius: var(--btn-radius);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.1rem;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px 0 rgba(16,185,129,0.08);
+}
+.btn-primary {
+  background-color: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #7c3aed;
+  border-color: #7c3aed;
+  color: #fff;
+}
+.btn-success {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn-success:hover, .btn-success:focus {
+  background-color: #059669;
+  border-color: #059669;
+  color: #fff;
+}
+.btn-outline-light {
+  border-color: #fff;
+  color: #fff;
+  background: transparent;
+}
+.btn-outline-light:hover, .btn-outline-light:focus {
+  background: #fff;
+  color: var(--surface);
+}
+
+/* Forms */
+.form-control {
+  background: #18181b;
+  border: 1.5px solid #333;
+  color: var(--text);
+  border-radius: 0.6rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+  transition: border 0.15s;
+}
+.form-control:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  background: #232336;
+  color: #fff;
+}
+
+/* Section & spacing */
+.container {
+  padding-top: 1.5rem;
+  padding-bottom: 2.5rem;
+}
+hr {
+  border-top: 1.5px solid var(--surface);
+  margin: 2.5rem 0;
+}
+footer {
+  margin-top: 3rem;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+/* Utility */
+.shadow-sm {
+  box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10) !important;
+}
+.text-muted {
+  color: var(--muted) !important;
+}
+.text-light {
+  color: #fff !important;
+}
+.text-center {
+  text-align: center !important;
+}
+.mt-5 {
+  margin-top: 3rem !important;
+}
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+.mb-5 {
+  margin-bottom: 2.5rem !important;
+}
+
+/* Custom Utility */
+.text-accent {
+  color: var(--accent) !important;
+}
+.bg-surface {
+  background-color: var(--surface) !important;
+}
+
+/* Hero overlay styles */
+header {
+  position: relative;
+}
+
+.hero-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.hero-headline {
+  position: relative;
+  margin-top: -140px;
+  z-index: 5;
+  text-shadow: 0 1px 3px #000;
+}
+
+@media (min-width: 992px) {
+  .hero-headline {
+    margin-top: -220px;
+  }
 }

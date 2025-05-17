@@ -4,6 +4,22 @@ This project is a .NET 8 MVC web application that dynamically mints Solana NFTs 
 
 ---
 
+## 🏷️ Attribute Metadata Support
+
+This app now supports on-chain NFT attribute metadata (e.g., Artist, ISRC) in the Metaplex standard format.  
+When minting, the controller encodes a minimal JSON object with an `attributes` array, base64-encoded and stored in the on-chain URI.  
+This ensures that wallets and explorers display trait tags such as Artist and ISRC for each NFT.
+
+**Example on-chain metadata:**
+```json
+{
+  "attributes": [
+    { "trait_type": "Artist", "value": "Billie Eilish" },
+    { "trait_type": "ISRC",   "value": "USUM71900764" }
+  ]
+}
+```
+
 ## 🧠 How the Minting Flow Works
 
 1. **User triggers** `/Mint?id=1` in the browser.
@@ -30,6 +46,8 @@ node mint.js mint\_temp.json
 
 ## ⚙️ Setup Instructions
 
+**Note:** SQL Server connection strings are configured in `appsettings.Development.json` using the keys `SOUNDCHARTS_CONNECTION_STRING` and `NFT_CACHE_CONNECTION_STRING`. They should point to the SQL Server at `192.168.68.140` with user `SA` and password `YourStrong@Passw0rd`.
+
 ### 1. Clone the Repo
 
 ```bash
@@ -44,8 +62,8 @@ cd YOUR_REPO_NAME
 Inside the `mint_js/` folder, create a `.env` file with the following:
 
 ```env
-# Solana private key as a JSON array (from Phantom, Backpack, etc.)
-SOLANA_SECRET_KEY=[12,34,56,...]  
+# Solana private key as a Base58-encoded string (from Phantom, Backpack, etc.)
+SOLANA_SECRET_KEY=4aqj9xAZZZip7XaYc8UpvNn2kyhaeZSZ9J9hEGJW3H9SmivojJPH1xSeHHjf7tBQdHsoVX1iAJ6C8Sh1ZDHqWVoA
 
 # RPC endpoint (mainnet or devnet)
 SOLANA_URL=https://api.mainnet-beta.solana.com
@@ -80,6 +98,26 @@ http://localhost:5096/
 
 ---
 
+---
+### Mac OS / Raspberry Pi (ARM64): Azure SQL Edge via Podman
+
+> On macOS ARM64 (M1/M2) and Raspberry Pi 5 Linux, run the following command to start Azure SQL Edge in a container:
+
+```bash
+podman run \
+  -e "ACCEPT_EULA=1" \
+  -e "MSSQL_SA_PASSWORD=YourStrong@Passw0rd" \
+  -e "MSSQL_PID=Developer" \
+  -e "MSSQL_USER=SA" \
+  -p 1433:1433 \
+  --name sql1 \
+  --hostname sql1 \
+  -d mcr.microsoft.com/azure-sql-edge:latest
+```
+
+After the container is running, connect to `localhost:1433` using `SA` and `YourStrong@Passw0rd`.
+
+---
 ## 🗃️ Database Setup
 
 Create a table named `NFTCACHE` (or `SongNFTMetadata`) using this schema:
@@ -139,4 +177,3 @@ Polish Metadata Rendering
 Ensure all fields (symbol, image, etc.) are accurately rendered
 
 Fix Wikipedia cover art fallback or add proxy image support
-

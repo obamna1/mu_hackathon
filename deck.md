@@ -121,8 +121,7 @@ We laid the groundwork across **two tightly integrated divisions**:
 - Discovery stamped with ULID, signed via Ed25519, logged on Solana
 - Signature generates a deterministic identicon—the visual fingerprint of the NFT
 - When the artist signs, we reveal the signature seeds for public verification
-- No trust, no leaks. Fully verifiable
-
+- No trust, no leaks. Fully verifiable.
 
 ---
 
@@ -159,7 +158,7 @@ We laid the groundwork across **two tightly integrated divisions**:
 
 ### ANONBOND NFTs
 
-- Agent mints NFT; shadows an undiscovered artist  
+- Agent mints NFT; shadows an unsigned artist  
 - Launch auction sets yield in $MU by market forces
 - Strong buzz → release remaining NFTs; weak buzz → NFT supply locks  
 - Maturity date: can claim the $MU yield  
@@ -174,6 +173,7 @@ We laid the groundwork across **two tightly integrated divisions**:
 ![Diagram](./anonbond.png)
 
 ---
+
 
 # Musika Is...
 

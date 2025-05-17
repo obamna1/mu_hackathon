@@ -12,5 +12,15 @@ namespace mu_marketplaceV0.Models
         }
 
         public DbSet<SC_GETSONG> SC_GETSONG { get; set; }
+        public DbSet<Song> Songs { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Song>()
+                .HasIndex(s => s.uuid)
+                .IsUnique();
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

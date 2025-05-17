@@ -1,0 +1,72 @@
+@model mu_marketplaceV0.Models.Song
+
+@{
+    ViewData["Title"] = "Song Details";
+}
+
+<h2>Song Details</h2>
+
+<table class="table table-bordered w-auto">
+    <tr>
+        <th>UUID</th>
+        <td>@Model.uuid</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>@Model.type</td>
+    </tr>
+    <tr>
+        <th>Title</th>
+        <td>@Model.name</td>
+    </tr>
+    <tr>
+        <th>Artist / Credit</th>
+        <td>@Model.credit_name</td>
+    </tr>
+    <tr>
+        <th>Artist</th>
+        <td>@Model.artist_name</td>
+    </tr>
+    <tr>
+        <th>ISRC</th>
+        <td>@Model.isrc_value</td>
+    </tr>
+    <tr>
+        <th>Country</th>
+        <td>@Model.isrc_country_name (@Model.isrc_country_code)</td>
+    </tr>
+    <tr>
+        <th>Release Date</th>
+        <td>@Model.release_date?.ToString("yyyy-MM-dd")</td>
+    </tr>
+    <tr>
+        <th>Duration</th>
+        <td>@((Model.duration ?? 0) + " sec")</td>
+    </tr>
+        <tr>
+            <th>Explicit</th>
+            <td>@((Model.Explicit ?? false) ? "Yes" : "No")</td>
+        </tr>
+    <tr>
+        <th>Distributor</th>
+        <td>@Model.distributor</td>
+    </tr>
+    <tr>
+        <th>Genres</th>
+        <td>@Model.genres</td>
+    </tr>
+    <tr>
+        <th>Composers</th>
+        <td>@Model.composers</td>
+    </tr>
+    <tr>
+        <th>Producers</th>
+        <td>@Model.producers</td>
+    </tr>
+    <tr>
+        <th>Labels</th>
+        <td>@Model.labels</td>
+    </tr>
+</table>
+
+<a asp-controller="Soundcharts" asp-action="Ping" class="btn btn-primary">Lookup another song</a>

@@ -1,0 +1,46 @@
+@model MintResultViewModel
+@{
+    ViewData["Title"] = "NFT Minted!";
+}
+
+<div class="card shadow-lg mt-5">
+    <div class="card-body text-center">
+        <h2 class="gradient-text fw-bold mb-3 d-flex justify-content-center align-items-center gap-2">
+            <i class="lucide lucide-check-circle text-accent"></i> Mint&nbsp;Successful!
+        </h2>
+
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="mb-4">
+                <img src="@Model.ImageUrl" alt="NFT Cover" class="img-fluid rounded" style="max-width:200px;" />
+            </div>
+        }
+
+        <p class="lead">Your NFT has been successfully minted on the Solana <strong>devnet</strong>.</p>
+
+        <div class="mb-4">
+            <h5 class="text-accent mb-1 fw-medium">Mint Address</h5>
+            <code class="user-select-all">@Model.MintAddress</code>
+        </div>
+
+        <div class="mb-4">
+            <h5 class="text-accent mb-1 fw-medium">Transaction Signature</h5>
+            <code class="user-select-all">@Model.TransactionSignature</code>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ExplorerUrl))
+        {
+            <a class="btn btn-success" target="_blank" rel="noopener"
+               href="@Model.ExplorerUrl">
+                View on Solana Explorer
+                <i class="lucide lucide-external-link ms-1"></i>
+            </a>
+        }
+
+        <details class="mt-4">
+            <summary>View raw process output</summary>
+            <pre class="text-start bg-surface text-light p-3 rounded overflow-auto" style="max-height:300px;"><code>@Model.RawOutput</code></pre>
+            <pre class="text-start bg-surface text-light p-3 rounded overflow-auto" style="max-height:300px;"><code class="text-danger">@Model.RawError</code></pre>
+        </details>
+    </div>
+</div>

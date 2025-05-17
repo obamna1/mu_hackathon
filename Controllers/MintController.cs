@@ -3,8 +3,11 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using mu_marketplaceV0.Models;
+using mu_marketplaceV0.ViewModels;
+using mu_marketplaceV0.Services;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace mu_marketplaceV0.Controllers
 {
@@ -28,37 +31,57 @@ namespace mu_marketplaceV0.Controllers
             var song = await _context.SongNFTMetadata.FindAsync(id);
             if (song == null) return NotFound("Song not found");
 
-            var metadata = new
-            {
-                title = song.Title,
-                isrc = song.Isrc,
-                writers = new[] { song.Writer1, song.Writer2 },
-                publishers = new[] { song.Publisher1, song.Publisher2 },
-                ascap_share = song.AscapShare,
-                artist = song.Artist,
-                release_date = song.ReleaseDate.ToString("yyyy-MM-dd"),
-                copyright = song.Copyright,
-                duration_seconds = song.DurationSeconds,
-                explicit_ = song.Explicit,
-                language = song.Language,
-                distributor = song.Distributor,
-                origin_country = song.OriginCountry,
+            // Use the image_url from the database (external link)
+            // No SVG generation
 
-                uri = $"{Request.Scheme}://{Request.Host}/metadata/{id}.json"
+            // Build JSON metadata with only the attributes array
+            var meta = new
+            {
+                attributes = new[]
+                {
+                    new { trait_type = "Artist", value = song.Artist },
+                    new { trait_type = "ISRC", value = song.Isrc ?? "SONG" }
+                }
             };
 
-            var json = JsonSerializer.Serialize(metadata, new JsonSerializerOptions { WriteIndented = true });
-            var tempPath = Path.Combine(Directory.GetCurrentDirectory(), "mint_temp.json");
-            await System.IO.File.WriteAllTextAsync(tempPath, json);
+            var metaJson = JsonSerializer.Serialize(meta);
+            var tempPath = Path.Combine(Directory.GetCurrentDirectory(), "mint_input.json");
+            await System.IO.File.WriteAllTextAsync(tempPath, metaJson);
+
+            // Base64 encode the JSON (no gzip)
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(metaJson);
+            var b64 = Convert.ToBase64String(jsonBytes);
+            var dataUri = "data:application/json;base64," + b64;
+
+            // Check length against 200-byte limit
+            if (System.Text.Encoding.UTF8.GetByteCount(dataUri) > 200)
+            {
+                return StatusCode(400, $"Metadata URI too long: {System.Text.Encoding.UTF8.GetByteCount(dataUri)} bytes\n\n{dataUri}");
+            }
+
+            // Prepare the object for the mint script
+            var mintInput = new
+            {
+                uri = dataUri,
+                image_url = song.ImageUrl,
+                title = song.Title,
+                isrc = song.Isrc,
+                artist = song.Artist
+            };
+
+            var mintInputJson = JsonSerializer.Serialize(mintInput);
+            var mintInputPath = Path.Combine(Directory.GetCurrentDirectory(), "mint_input.json");
+            await System.IO.File.WriteAllTextAsync(mintInputPath, mintInputJson);
 
             var scriptPath = Path.Combine(Directory.GetCurrentDirectory(), "mint_js", "mint.js");
-            // move out of wwwroot!
+            var nodeDir = Path.Combine(Directory.GetCurrentDirectory(), "mint_js");
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "node",
-                    Arguments = $"\"{scriptPath}\" \"{tempPath}\"",
+                    Arguments = $"\"{scriptPath}\" \"{mintInputPath}\"",
+                    WorkingDirectory = nodeDir,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
@@ -78,7 +101,23 @@ namespace mu_marketplaceV0.Controllers
                 return StatusCode(500, combinedLog);
             }
 
-            return Content(combinedLog);
+            // Parse successful mint details from STDOUT
+            var mintMatch = Regex.Match(output, @"Mint:\s+([A-Za-z0-9]+)");
+            var txMatch   = Regex.Match(output, @"Transaction:\s+([A-Za-z0-9]+)");
+
+            var viewModel = new MintResultViewModel
+            {
+                MintAddress = mintMatch.Success ? mintMatch.Groups[1].Value : null,
+                TransactionSignature = txMatch.Success ? txMatch.Groups[1].Value : null,
+                ExplorerUrl = mintMatch.Success
+                    ? $"https://explorer.solana.com/address/{mintMatch.Groups[1].Value}?cluster=devnet"
+                    : null,
+                ImageUrl = song.ImageUrl,
+                RawOutput = output,
+                RawError  = error
+            };
+
+            return View("Result", viewModel);
 
         }
 

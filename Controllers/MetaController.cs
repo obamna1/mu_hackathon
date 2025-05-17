@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Controllers/MetaController.cs
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Encodings.Web;
 using mu_marketplaceV0.Models;
+using System.Collections.Generic;
 using mu_marketplaceV0.ViewModels;
 using System.Threading.Tasks;
+using mu_marketplaceV0.Services;
 
 namespace mu_marketplaceV0.Controllers
 {
@@ -11,10 +14,12 @@ namespace mu_marketplaceV0.Controllers
     public class MetaController : Controller
     {
         private readonly SongMetaDbContext _context;
+        private readonly SolanaWalletService _walletService;
 
-        public MetaController(SongMetaDbContext context)
+        public MetaController(SongMetaDbContext context, SolanaWalletService walletService)
         {
             _context = context;
+            _walletService = walletService;
         }
 
         // GET /Meta?id=1
@@ -33,10 +38,15 @@ namespace mu_marketplaceV0.Controllers
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
+            var walletAddress = _walletService.GetPublicAddress();
+            var tokensBySong = await _walletService.GetTokensBySongAsync();
+
             var vm = new MetaViewModel
             {
                 Song = song,
-                Json = JsonSerializer.Serialize(song, options)
+                Json = JsonSerializer.Serialize(song, options),
+                WalletAddress = walletAddress,
+                TokensBySong = tokensBySong
             };
 
             ViewData["Title"] = "Metadata Test";
@@ -55,24 +65,20 @@ namespace mu_marketplaceV0.Controllers
 
             CleanMetadata(song);
 
-            var imageUrl = $"https://en.wikipedia.org/wiki/Special:FilePath/{Uri.EscapeDataString(song.Title)}_cover.jpg";
-
             var metadata = new
             {
                 name = song.Title,
                 symbol = song.Isrc?.Substring(0, 4).ToUpper() ?? "SONG",
                 description = $"A verified rights NFT for {song.Title} by {song.Artist}.",
-                image = imageUrl,
+                image = song.ImageUrl,
                 attributes = new List<object>
-        {
-            new { trait_type = "Artist", value = song.Artist },
-            new { trait_type = "Release Date", value = song.ReleaseDate.ToString("yyyy-MM-dd") },
-            new { trait_type = "Explicit", value = song.Explicit },
-            new { trait_type = "Language", value = song.Language },
-            new { trait_type = "Duration", value = song.DurationSeconds },
-            new { trait_type = "Country", value = song.OriginCountry },
-            new { trait_type = "Distributor", value = song.Distributor }
-        }
+                {
+                    new { trait_type = "Artist",       value = song.Artist },
+                    new { trait_type = "Title",        value = song.Title },
+                    new { trait_type = "Release Date", value = song.ReleaseDate.ToString("yyyy-MM-dd") },
+                    new { trait_type = "ISRC",         value = song.Isrc },
+                    new { trait_type = "image_url",    value = song.ImageUrl }
+                }
             };
 
             var options = new JsonSerializerOptions
@@ -83,8 +89,6 @@ namespace mu_marketplaceV0.Controllers
 
             return new JsonResult(metadata, options);
         }
-
-
 
         private void CleanMetadata(SongNFTMetadata song)
         {
